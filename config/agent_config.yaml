@@ -1,0 +1,25 @@
+agent:
+  name: Lumeta
+  version: "1.0.0"
+  language: "pt-BR"
+  description: "Agente responsável por receber, interpretar e estruturar solicitações."
+
+intents:
+  - id: suporte_tecnico
+    description: "Erros, bugs, falhas de acesso ou problemas técnicos."
+  - id: financeiro
+    description: "Faturas, cobranças, reembolsos, notas fiscais ou pagamentos."
+  - id: comercial
+    description: "Orçamentos, planos, demonstrações ou contratação de serviços."
+  - id: agendamento
+    description: "Marcar, remarcar ou cancelar reuniões, consultas ou atendimentos."
+  - id: informacao_geral
+    description: "Dúvidas gerais, status, políticas ou informações institucionais."
+  - id: desconhecido
+    description: "Solicitações ambíguas ou fora do escopo mapeado."
+
+priorities:
+  - baixa
+  - media
+  - alta
+  - critica

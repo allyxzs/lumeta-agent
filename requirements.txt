@@ -1,0 +1,4 @@
+# Dependências opcionais para integração com LLMs e configuração YAML
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+openai>=1.30.0
