@@ -2,21 +2,21 @@
   {
     "sender_id": "cliente_01",
     "channel": "whatsapp",
-    "text": "Urgente! O sistema fora do ar e não consigo fazer login desde as 09:30."
+    "text": "Absurdo!! Sistema fora do ar desde 09:30 e ninguém resolve. Meu contato é (21) 99888-7766."
   },
   {
     "sender_id": "cliente_02",
     "channel": "email",
-    "text": "Preciso da segunda via da fatura do pedido #45892 no valor de R$ 249,90."
+    "text": "Preciso da segunda via da fatura do pedido #45892 no valor de R$ 249,90. CPF 123.456.789-00."
   },
   {
     "sender_id": "cliente_03",
     "channel": "web",
-    "text": "Gostaria de agendar uma reunião para o dia 25/11 às 14:00."
+    "text": "Quero agendar uma reunião para o dia 25/11 às 14:00 e ver um orçamento do plano enterprise."
   },
   {
     "sender_id": "cliente_04",
     "channel": "web",
-    "text": "Quero um orçamento para contratar o plano empresarial."
+    "text": "Quero cancelar assinatura da conta vinculada a joao@empresa.com.br."
   }
 ]

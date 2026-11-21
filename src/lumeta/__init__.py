@@ -1,5 +1,15 @@
 from .agent import LumetaAgent
-from .schemas import IncomingRequest, InterpretationResult, AgentResponse
+from .memory import SessionMemory
+from .middleware import AuditLogMiddleware, PIIMaskingMiddleware
+from .schemas import AgentResponse, IncomingRequest, InterpretationResult
 
-__all__ = ["LumetaAgent", "IncomingRequest", "InterpretationResult", "AgentResponse"]
-__version__ = "1.0.0"
+__all__ = [
+    "LumetaAgent",
+    "SessionMemory",
+    "AuditLogMiddleware",
+    "PIIMaskingMiddleware",
+    "IncomingRequest",
+    "InterpretationResult",
+    "AgentResponse",
+]
+__version__ = "2.0.0"

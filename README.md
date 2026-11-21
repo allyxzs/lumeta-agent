@@ -1,66 +1,76 @@
-# Lumeta Agent
+# Lumeta Agent v2.0
 
-**Lumeta** é um agente modular projetado para **receber, interpretar, classificar e estruturar solicitações** em linguagem natural, preparando-as para roteamento ou execução por outros sistemas.
+**Lumeta** é um agente modular em Python projetado para **receber, interpretar, enriquecer com contexto e rotear solicitações** em linguagem natural.
 
-## Funcionalidades
+## Novidades da v2.0
 
-- **Recepção padronizada**: recebe texto livre, metadados do solicitante e canal de origem.
-- **Interpretação estruturada**: identifica intenção (`intent`), prioridade (`priority`), entidades-chave (`entities`), resumo objetivo e confiança (`confidence`).
-- **Modo Híbrido**:
-  - **Modo LLM** (via API compatível com OpenAI/Gemini configurada em `.env`).
-  - **Modo Local / Fallback**: interpretador heurístico pronto para uso offline, testes e desenvolvimento sem chave de API.
-- **Roteamento extensível**: mapeia intenções interpretadas para manipuladores (handlers) específicos.
-- **CLI interativa** para testar solicitações direto no terminal.
+- **Motor Multi-Provider com Fallback Automático**:
+  - `local`: interpretador heurístico offline (zero dependências).
+  - `ollama`: integração direta com modelos locais no Ollama via HTTP nativo.
+  - `llm`: integração com APIs compatíveis com OpenAI.
+- **Memória de Sessão**: mantém contexto por `session_id`, permitindo responder perguntas de clarificação em múltiplos turnos.
+- **Análise Mais Rica**: extrai intenção principal, intenções secundárias, prioridade, sentimento, entidades (e-mails, telefones, CPF/CNPJ, URLs, datas, horários, valores e protocolos), confiança e métricas de latência.
+- **Middlewares Extensíveis**: normalização de texto, proteção/mascaramento opcional de PII e auditoria em JSONL.
+- **API REST Nativa + Batch**: suba um endpoint HTTP com `python -m lumeta.cli --serve` ou processe lotes JSON com `--batch`.
 
 ## Estrutura do Projeto
 
 ```text
 lumeta-agent/
 ├── config/
-│   └── agent_config.yaml      # Configurações gerais, intenções e prioridades
+│   └── agent_config.yaml      # Configurações de intenções, prioridades e roteamento
 ├── prompts/
-│   └── system_prompt.md       # Prompt de sistema do agente Lumeta
+│   └── system_prompt.md       # Prompt de sistema v2.0 para LLMs
 ├── src/lumeta/
 │   ├── __init__.py
-│   ├── schemas.py             # Modelos de entrada e saída estruturada
-│   ├── interpreter.py         # Motor de interpretação (LLM + fallback local)
-│   ├── router.py              # Roteador de intenções para handlers
+│   ├── schemas.py             # Modelos estruturados (Request, Interpretation, Response)
+│   ├── memory.py              # Gerenciador de sessões e contexto multi-turno
+│   ├── middleware.py          # Hooks pré/pós-processamento e auditoria JSONL
+│   ├── interpreter.py         # Motor híbrido (local, Ollama e OpenAI)
+│   ├── router.py              # Roteador extensível de intenções
 │   ├── agent.py               # Orquestrador principal (LumetaAgent)
-│   └── cli.py                 # Interface de linha de comando
+│   ├── api.py                 # Servidor REST HTTP nativo (zero dependências)
+│   └── cli.py                 # CLI interativa, batch e servidor
 ├── examples/
-│   └── sample_requests.json   # Exemplos de solicitações para teste
+│   └── sample_requests.json   # Exemplos de solicitações para teste em lote
 ├── tests/
-│   └── test_lumeta.py         # Testes automatizados (unittest)
+│   └── test_lumeta.py         # Suíte de testes automatizados
+├── CHANGELOG.md
+├── pyproject.toml
 ├── .env.example
+├── .gitignore
 └── requirements.txt
 ```
 
 ## Como Executar
 
-1. (Opcional) Crie e ative um ambiente virtual:
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Linux/macOS
-   # .venv\Scripts\activate   # Windows
-   ```
+### 1. CLI Interativa (modo local)
+```bash
+PYTHONPATH=src python -m lumeta.cli
+```
 
-2. (Opcional) Instale as dependências se for usar integração com LLM:
-   ```bash
-   pip install -r requirements.txt
-   ```
-   > O modo local funciona apenas com a biblioteca padrão do Python 3.9+.
+### 2. Processamento em Lote (Batch)
+```bash
+PYTHONPATH=src python -m lumeta.cli --batch examples/sample_requests.json
+```
 
-3. Configure variáveis de ambiente (opcional, para modo LLM):
-   ```bash
-   cp .env.example .env
-   ```
+### 3. Subir a API REST
+```bash
+PYTHONPATH=src python -m lumeta.cli --serve --port 8080
+```
+Teste com `curl`:
+```bash
+curl -X POST http://127.0.0.1:8080/v1/interpret \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Urgente! Erro no login e cobrança duplicada no pedido #45892", "sender_id": "cliente_01"}'
+```
 
-4. Execute a CLI interativa:
-   ```bash
-   PYTHONPATH=src python -m lumeta.cli
-   ```
+### 4. Usar com Ollama (LLM Local)
+```bash
+PYTHONPATH=src python -m lumeta.cli --mode ollama
+```
 
-5. Execute os testes automatizados:
-   ```bash
-   PYTHONPATH=src python -m unittest discover -s tests -v
-   ```
+### 5. Rodar Testes
+```bash
+PYTHONPATH=src python -m unittest discover -s tests -v
+```

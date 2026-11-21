@@ -1,4 +1,5 @@
-# Dependências opcionais para integração com LLMs e configuração YAML
+# O modo local, Ollama (HTTP nativo) e servidor HTTP funcionam sem dependências externas (Python 3.9+).
+# Instale as dependências abaixo apenas se quiser usar o SDK oficial da OpenAI, .env automático ou parser YAML completo.
 python-dotenv>=1.0.0
 pyyaml>=6.0.1
 openai>=1.30.0
